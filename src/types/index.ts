@@ -36,6 +36,7 @@ export interface Task {
   prompt: string;
   dir: string;
   claude: Partial<ClaudeConfig>;
+  env?: Record<string, string>;
 }
 
 export interface HistoryEntry {

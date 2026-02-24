@@ -35,7 +35,13 @@ export async function parseTaskFile(filePath: string): Promise<Task> {
     if (data.claude.acknowledge_risks != null) claude.acknowledge_risks = data.claude.acknowledge_risks;
   }
 
-  return { name, filePath, schedule, timeout, timeoutMs, enabled, prompt, dir, claude };
+  const env: Record<string, string> | undefined = data.env
+    ? Object.fromEntries(
+        Object.entries(data.env).map(([k, v]) => [k, String(v)])
+      )
+    : undefined;
+
+  return { name, filePath, schedule, timeout, timeoutMs, enabled, prompt, dir, claude, env };
 }
 
 export async function loadTasks(): Promise<Task[]> {

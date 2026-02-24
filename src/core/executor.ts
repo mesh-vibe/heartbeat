@@ -1,4 +1,4 @@
-import { spawn } from "node:child_process";
+import { spawn, execFileSync } from "node:child_process";
 import pLimit from "p-limit";
 import type { Task, HeartbeatConfig, HistoryEntry } from "../types/index.js";
 import { sanitizeArgs } from "../utils/safety.js";
@@ -6,6 +6,45 @@ import { logger } from "../utils/logger.js";
 
 export interface ExecutionResult {
   entry: HistoryEntry;
+}
+
+async function resolveEnv(
+  env: Record<string, string> | undefined
+): Promise<Record<string, string>> {
+  if (!env) return {};
+
+  const resolved: Record<string, string> = {};
+  for (const [key, value] of Object.entries(env)) {
+    if (value.startsWith("vault://")) {
+      const secretKey = value.slice("vault://".length);
+      try {
+        resolved[key] = execFileSync("vault", ["get", secretKey], {
+          encoding: "utf-8",
+          timeout: 5_000,
+        }).trim();
+        logger.info(`Resolved env ${key} from Vault`);
+      } catch (err) {
+        throw new Error(
+          `Failed to resolve env ${key} from Vault: ${(err as Error).message}`
+        );
+      }
+    } else if (value.startsWith("op://")) {
+      try {
+        resolved[key] = execFileSync("op", ["read", value], {
+          encoding: "utf-8",
+          timeout: 10_000,
+        }).trim();
+        logger.info(`Resolved env ${key} from 1Password`);
+      } catch (err) {
+        throw new Error(
+          `Failed to resolve env ${key} from 1Password: ${(err as Error).message}`
+        );
+      }
+    } else {
+      resolved[key] = value;
+    }
+  }
+  return resolved;
 }
 
 function mergeClaudeArgs(config: HeartbeatConfig, task: Task): string[] {
@@ -35,6 +74,27 @@ export async function executeTask(
 
   logger.info(`Executing task: ${task.name}`, { command, maxTurns });
 
+  let taskEnv: Record<string, string>;
+  try {
+    taskEnv = await resolveEnv(task.env);
+  } catch (err) {
+    const finishedAt = new Date().toISOString();
+    const durationMs = new Date(finishedAt).getTime() - new Date(startedAt).getTime();
+    logger.error(`Task aborted: ${task.name}`, { error: (err as Error).message });
+    return {
+      entry: {
+        taskName: task.name,
+        startedAt,
+        finishedAt,
+        durationMs,
+        status: "error",
+        exitCode: null,
+        stdout: "",
+        stderr: (err as Error).message,
+      },
+    };
+  }
+
   return new Promise<ExecutionResult>((resolve) => {
     const ac = new AbortController();
     const timeout = setTimeout(() => ac.abort(), task.timeoutMs);
@@ -43,7 +103,7 @@ export async function executeTask(
       cwd: task.dir,
       signal: ac.signal,
       stdio: ["ignore", "pipe", "pipe"],
-      env: { ...process.env },
+      env: { ...process.env, CLAUDECODE: undefined, ...taskEnv },
     });
 
     let stdout = "";

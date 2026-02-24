@@ -1,4 +1,4 @@
-node_modules/
+makenode_modules/
 dist/
 *.tsbuildinfo
 .DS_Store

@@ -41,4 +41,18 @@ Global config lives in \`~/.heartbeat/config.md\`. Key settings:
 - **heartbeat**: tick interval (e.g., "30m")
 - **concurrency**: max parallel tasks
 - **claude.max_turns**: default max turns per task
+
+## Environment variables
+
+Tasks can declare \`env:\` in frontmatter to inject secrets at runtime:
+
+\`\`\`yaml
+env:
+  ANTHROPIC_API_KEY: "vault://anthropic-api-key"
+\`\`\`
+
+Supported prefixes:
+- \`vault://KEY\` — resolve from Vault (macOS Keychain, preferred)
+- \`op://...\` — resolve from 1Password CLI (fallback)
+- Plain string — passed through as-is
 `;
