@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { HistoryManager } from "../../src/core/history-manager.js";
 import { setHeartbeatDirOverride } from "../../src/utils/paths.js";
-import type { HistoryEntry } from "../../src/types/index.js";
+import type { HistoryEntry } from "../../src/types";
 
 let tmpDir: string;
 

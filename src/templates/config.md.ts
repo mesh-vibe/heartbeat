@@ -14,7 +14,7 @@ claude:
 
 # Heartbeat Configuration
 
-This file configures the global heartbeat daemon (~/.heartbeat/).
+This file configures the global heartbeat daemon (~/mesh-vibe/heartbeat/).
 
 - **heartbeat**: How often the daemon ticks (e.g., "30m", "1h")
 - **concurrency**: Maximum number of tasks running in parallel

@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { isDue, getDueTasks } from "../../src/core/scheduler.js";
-import type { Task, HistoryEntry, Schedule } from "../../src/types/index.js";
+import type { Task, HistoryEntry, Schedule } from "../../src/types";
 import { homedir } from "node:os";
 
 function makeTask(schedule: Schedule, name = "test"): Task {

@@ -33,7 +33,7 @@ export function lockPath(): string {
 }
 
 export function globalHeartbeatDir(): string {
-  return join(homedir(), ".heartbeat");
+  return join(homedir(), "mesh-vibe", "heartbeat");
 }
 
 export function launchAgentDir(): string {

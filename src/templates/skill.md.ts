@@ -5,7 +5,7 @@ description: Manage heartbeat scheduled tasks. Use when the user wants to check 
 
 # Heartbeat — Scheduled Task Runner
 
-Heartbeat runs scheduled Claude Code tasks from \`~/.heartbeat/\`.
+Heartbeat runs scheduled Claude Code tasks from \`~/mesh-vibe/heartbeat/\`.
 
 ## Available commands
 
@@ -20,7 +20,7 @@ Heartbeat runs scheduled Claude Code tasks from \`~/.heartbeat/\`.
 
 ## Task files
 
-Tasks are Markdown files in \`~/.heartbeat/\` with YAML frontmatter:
+Tasks are Markdown files in \`~/mesh-vibe/heartbeat/\` with YAML frontmatter:
 
 \`\`\`markdown
 ---
@@ -37,7 +37,7 @@ The \`dir\` field specifies the working directory where Claude runs. Defaults to
 
 ## Configuration
 
-Global config lives in \`~/.heartbeat/config.md\`. Key settings:
+Global config lives in \`~/mesh-vibe/heartbeat/config.md\`. Key settings:
 - **heartbeat**: tick interval (e.g., "30m")
 - **concurrency**: max parallel tasks
 - **claude.max_turns**: default max turns per task
