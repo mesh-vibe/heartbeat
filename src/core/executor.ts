@@ -103,7 +103,7 @@ export async function executeTask(
       cwd: task.dir,
       signal: ac.signal,
       stdio: ["ignore", "pipe", "pipe"],
-      env: { ...process.env, CLAUDECODE: undefined, ...taskEnv },
+      env: { ...process.env, CLAUDECODE: undefined, ANTHROPIC_API_KEY: undefined, ...taskEnv },
     });
 
     let stdout = "";

@@ -1,9 +1,15 @@
+import { join } from "node:path";
 import { readFile, writeFile, unlink } from "node:fs/promises";
 import type { DaemonState } from "../types/index.js";
-import { daemonPath } from "./paths.js";
+import { daemonPath, heartbeatDir } from "./paths.js";
+
+function pidfilePath(): string {
+  return join(heartbeatDir(), "heartbeat.pid");
+}
 
 export async function writeDaemonState(state: DaemonState): Promise<void> {
   await writeFile(daemonPath(), JSON.stringify(state, null, 2));
+  await writeFile(pidfilePath(), String(state.pid));
 }
 
 export async function readDaemonState(): Promise<DaemonState | null> {
@@ -18,6 +24,11 @@ export async function readDaemonState(): Promise<DaemonState | null> {
 export async function clearDaemonState(): Promise<void> {
   try {
     await unlink(daemonPath());
+  } catch {
+    // Already gone
+  }
+  try {
+    await unlink(pidfilePath());
   } catch {
     // Already gone
   }
