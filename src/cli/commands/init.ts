@@ -5,6 +5,7 @@ import { heartbeatDir, historyDir } from "../../utils/paths.js";
 import { CONFIG_TEMPLATE } from "../../templates/config.md.js";
 import { EXAMPLE_TASK_TEMPLATE } from "../../templates/example-task.md.js";
 import { SKILL_TEMPLATE } from "../../templates/skill.md.js";
+import { TASK_README_TEMPLATE } from "../../templates/task-readme.md.js";
 import { logger } from "../../utils/logger.js";
 
 async function exists(path: string): Promise<boolean> {
@@ -33,6 +34,10 @@ export async function init(): Promise<void> {
   await writeFile(join(hbDir, "config.md"), CONFIG_TEMPLATE);
   logger.info("Created ~/mesh-vibe/heartbeat/config.md");
 
+  // Write README
+  await writeFile(join(hbDir, "README.md"), TASK_README_TEMPLATE);
+  logger.info("Created ~/mesh-vibe/heartbeat/README.md");
+
   // Write example task
   await writeFile(join(hbDir, "example-task.md"), EXAMPLE_TASK_TEMPLATE);
   logger.info("Created ~/mesh-vibe/heartbeat/example-task.md");
@@ -44,8 +49,9 @@ export async function init(): Promise<void> {
   logger.info("Created ~/.claude/skills/heartbeat/SKILL.md");
 
   console.log(`\nInitialized heartbeat in ${hbDir}`);
-  console.log(`  ~/mesh-vibe/heartbeat/config.md       — global configuration`);
-  console.log(`  ~/mesh-vibe/heartbeat/example-task.md  — starter task (edit or delete)`);
+  console.log(`  ~/mesh-vibe/heartbeat/README.md        — task authoring guide`);
+  console.log(`  ~/mesh-vibe/heartbeat/config.md        — global configuration`);
+  console.log(`  ~/mesh-vibe/heartbeat/example-task.md   — starter task (edit or delete)`);
   console.log(`  ~/.claude/skills/heartbeat/   — Claude Code skill`);
   console.log(`\nNext steps:`);
   console.log(`  Edit ~/mesh-vibe/heartbeat/example-task.md or add new tasks with:`);

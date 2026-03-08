@@ -48,7 +48,7 @@ export async function loadTasks(): Promise<Task[]> {
   const dir = heartbeatDir();
   const entries = await readdir(dir);
   const taskFiles = entries.filter(
-    (e) => e.endsWith(".md") && e !== "config.md" && !e.startsWith(".")
+    (e) => e.endsWith(".md") && e !== "config.md" && e !== "README.md" && !e.startsWith(".")
   );
 
   const tasks: Task[] = [];
