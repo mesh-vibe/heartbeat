@@ -61,6 +61,27 @@ export async function executeTask(
   config: HeartbeatConfig
 ): Promise<ExecutionResult> {
   const startedAt = new Date().toISOString();
+
+  if (task.queueOnly) {
+    const { addPrompt } = await import("meshvibe-prompt-queue");
+    addPrompt(task.prompt);
+    const finishedAt = new Date().toISOString();
+    const durationMs = new Date(finishedAt).getTime() - new Date(startedAt).getTime();
+    logger.info(`Task queued: ${task.name}`, { durationMs });
+    return {
+      entry: {
+        taskName: task.name,
+        startedAt,
+        finishedAt,
+        durationMs,
+        status: "success",
+        exitCode: 0,
+        stdout: "Queued to prompt-queue",
+        stderr: "",
+      },
+    };
+  }
+
   const command = task.claude.command ?? config.claude.command;
   const maxTurns = task.claude.max_turns ?? config.claude.max_turns;
   const args = mergeClaudeArgs(config, task);

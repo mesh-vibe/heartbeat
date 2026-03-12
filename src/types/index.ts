@@ -37,6 +37,7 @@ export interface Task {
   dir: string;
   claude: Partial<ClaudeConfig>;
   env?: Record<string, string>;
+  queueOnly?: boolean;
 }
 
 export interface HistoryEntry {

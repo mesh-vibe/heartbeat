@@ -41,7 +41,9 @@ export async function parseTaskFile(filePath: string): Promise<Task> {
       )
     : undefined;
 
-  return { name, filePath, schedule, timeout, timeoutMs, enabled, prompt, dir, claude, env };
+  const queueOnly = data.queue_only === true;
+
+  return { name, filePath, schedule, timeout, timeoutMs, enabled, prompt, dir, claude, env, queueOnly };
 }
 
 export async function loadTasks(): Promise<Task[]> {

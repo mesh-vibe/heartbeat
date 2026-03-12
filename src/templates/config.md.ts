@@ -1,6 +1,6 @@
 export const CONFIG_TEMPLATE = `---
 heartbeat: 30m
-concurrency: 3
+concurrency: 5
 history_retention: 7d
 notify:
   command: ""

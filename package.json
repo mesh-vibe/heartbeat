@@ -1,5 +1,5 @@
 {
-  "name": "heartbeat-agent",
+  "name": "meshvibe-heartbeat",
   "version": "0.1.0",
   "description": "Directory-scoped scheduled task runner for Claude Code",
   "type": "module",
@@ -20,6 +20,7 @@
   "dependencies": {
     "commander": "^12.1.0",
     "gray-matter": "^4.0.3",
+    "meshvibe-prompt-queue": "file:../prompt-queue",
     "p-limit": "^7.3.0"
   },
   "devDependencies": {
